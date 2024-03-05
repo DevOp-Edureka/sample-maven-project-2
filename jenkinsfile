@@ -1,11 +1,30 @@
 pipeline{
-  agent any 
+
+  agent any
+
+  tools {
+    jdk 'JDK11-22'
+    maven 'Maven3'
+  }
   stages {
-  stage('maven install') {
-    steps{
-      withMaven( maven: 'Maven3') {
-        sh 'mvn clean install'
+    stage ('Cleanup Workspace'){
+      steps{
+        cleanWs()
+      } 
+    }
+    stage('Checkout from SCM'){
+      steps{
+         git branch: 'main', changelog: false, credentialsId: 'Jenkins_agents', poll: false, url: 'https://github.com/DevOp-Edureka/sample-maven-project-2.git'
       }
+    }
+    stage('Build Application'){
+      steps{
+        sh 'mvn clean package'
+      }
+    }
+    stage('Test Aplication') {
+      steps{
+        sh 'mvn test'
     }
   }
 
