@@ -29,14 +29,12 @@ pipeline{
   }
   stage('Sonarqube Analysis'){
     steps{
-      withSonarQubeEnv(credentialsID:'jenkins-sonar-token-key'){
+      withSonarQubeEnv(credentialsId:'jenkins-sonar-token-key'){
         sh 'mvn sonar:sonar'
 
       }
     }
-
   }
-
 }
 
 }
