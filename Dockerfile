@@ -1,10 +1,10 @@
-FROM maven:3.9.6-eclipse-temurin-17 AS build
+FROM maven:3.9.6-eclipse-temurin-17 as build
 WORKDIR /app
 COPY . .
 RUN mvn clean install
 
-FROM eclipse-temurin:17.0.10_7-jre
+FROM eclipse-temurin:17.0.6_10-jdk
 WORKDIR /app
-COPY --from=build /app/target/my-app-1.0-SNAPSHOT.jar /apps/
-EXPOSE 8081
-ENTRYPOINT ["java","-jar","my-app.jar"]
+COPY --from=build /app/target/my-app.jar /app/
+EXPOSE 8080
+CMD ["java", "-jar","my-app.jar"]
