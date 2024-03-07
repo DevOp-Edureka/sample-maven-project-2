@@ -34,17 +34,10 @@ pipeline{
 
   stage('Build and Push docker Image'){
     steps{
-      script{
-
-          withDockerRegistry(credentialsId: DOCKER_PASS, toolName: 'Docker-Latest'){
-            docker_image = docker.build '${IMAGE_NAME}'
-          }
-
-          withDockerRegistry(credentialsId: DOCKER_PASS, toolName: 'Docker-Latest'){
-            docker_image.push('${IMAGE_TAG}')
-            docker_image.push('latest')
-          }
-      }
+     echo 'Starting to build docker image'
+script {
+          dockerImage = docker.build registry + ":$BUILD_NUMBER"
+        }
     }
   }
 
