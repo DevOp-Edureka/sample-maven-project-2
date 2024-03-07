@@ -8,3 +8,4 @@ WORKDIR /app
 COPY --from=build /app/target/my-app-1.0-SNAPSHOT.jar /apps/
 EXPOSE 8081
 CMD ["java", "-jar", "my-app-1.0-SNAPSHOT.jar"]
+ENTRYPOINT ["java","-jar","my-app.jar"]
