@@ -35,14 +35,13 @@ pipeline{
   stage('Build and Push docker Image'){
     steps{
      echo 'Starting to build docker image'
-script{
- withDockerRegistry(credentialsId: DOCKER_PASS, toolName: 'Docker-Latest'){
-            docker_image = docker.build '${IMAGE_NAME}'
+      script{
+       withDockerRegistry(credentialsId: DOCKER_PASS, toolName: 'Docker-Latest'){
+                  docker_image = docker.build '${IMAGE_NAME}'
+                }
           }
-    }
   }
-
-
+}
 }
 
 }
