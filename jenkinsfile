@@ -6,6 +6,16 @@ pipeline{
     jdk 'JDK17-2'
     maven 'Maven3'
   }
+
+  environment {
+    APP_NAME = 'test-maven-pipeline'
+    RELEASE = '1.0.0'
+    DOCKER_USER = 'kony'
+    DOCKER_PASS ='dockerhub'
+    IMAGE_NAME = '${DOCKER_USER}' + '/' + '${APP_NAME}'
+    IMAGE_TAG = '${RELEASE}-${BUILD_NUMBER}'
+  }
+
   stages {
     stage ('Cleanup Workspace'){
       steps{
@@ -19,22 +29,50 @@ pipeline{
     }
     stage('Build Application'){
       steps{
-        sh 'mvn clean package'
+        bat 'mvn clean package'
       }
     }
     stage('Test Aplication') {
       steps{
-        sh 'mvn test'
+        bat 'mvn test'
     }
   }
   stage('Sonarqube Analysis'){
     steps{
-      withSonarQubeEnv(credentialsId:'jenkins-sonar-token-key'){
-        sh 'mvn sonar:sonar'
+      script{
+          withSonarQubeEnv(credentialsId:'jenkins-sonar-token'){
+          bat 'mvn sonar:sonar'
+           //bat instead of sh for windows run
 
+        }
+      } 
+    }
+  }
+  stage('Quality Gate'){
+    steps{
+      script{
+        waitForQualityGate abortPipeline: false, credentialsId: 'jenkins-sonar-token'
       }
     }
   }
+
+  stage('Build and Push docker Image'){
+    steps{
+      script{
+
+          docker.WithRegistry('', DOCKER_PASS){
+            docker_image = docker.build '${IMAGE_NAME}'
+          }
+
+          docker.WithRegistry('', DOCKER_PASS){
+            docker_image.push('${IMAGE_TAG}')
+            docker.image.push('latest')
+          }
+      }
+    }
+  }
+
+
 }
 
 }
