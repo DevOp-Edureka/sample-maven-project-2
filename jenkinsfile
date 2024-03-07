@@ -34,14 +34,14 @@ pipeline{
     }
     stage('Test Aplication') {
       steps{
-        sh 'mvn test'
+        bat 'mvn test'
     }
   }
   stage('Sonarqube Analysis'){
     steps{
       script{
           withSonarQubeEnv(credentialsId:'jenkins-sonar-token'){
-          sh 'mvn sonar:sonar'
+          bat 'mvn sonar:sonar'
 
         }
       } 
