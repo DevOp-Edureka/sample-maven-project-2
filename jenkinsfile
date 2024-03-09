@@ -56,8 +56,8 @@ stage('Sonarqube Analysis'){
       script{
         //bat 'docker build -t konyq/test-maven-pipeline .'
         /*def dockerImage = docker.build("test-maven-pipeline:${env.BUILD_ID}")*/
-            def dockerImage = docker.build('${IMAGE_NAME}')
-            dockerImage.push('${IMAGE_TAG}')
+            def dockerImage = docker.build('konyq/test-maven-pipeline2')
+            dockerImage.push()
             dockerImage('latest')
           /*
            withDockerRegistry(credentialsId: DOCKER_PASS, toolName: 'Docker-Latest'){
