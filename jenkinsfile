@@ -31,15 +31,37 @@ pipeline{
         bat 'mvn clean package'
       }
     }
+stage('Sonarqube Analysis'){
+    steps{
+      script{
+          withSonarQubeEnv(credentialsId:'jenkins-sonar-token'){
+          bat 'mvn sonar:sonar'
+           //bat instead of sh for windows run
+
+        }
+      } 
+    }
+  }
+  stage('Quality Gate'){
+    steps{
+      script{
+        waitForQualityGate abortPipeline: false, credentialsId: 'jenkins-sonar-token'
+      }
+    }
+  }
 
   stage('Build and Push docker Image'){
     steps{
      echo 'Starting to build docker image'
       script{
-       withDockerRegistry(credentialsId: DOCKER_PASS, toolName: 'Docker-Latest'){
-                  docker_image = docker.build '${IMAGE_NAME}'
-                }
-          }
+           withDockerRegistry(credentialsId: DOCKER_PASS, toolName: 'Docker-Latest'){
+                      docker_image = docker.build '${IMAGE_NAME}'
+            }
+            withDockerRegistry(credentialsId: DOCKER_PASS, toolName: 'Docker-Latest'){
+                docker_image.push('${IMAGE_TAG}')
+                docker_image.push('latest')
+            }
+      }
   }
 }
 }
