@@ -1,4 +1,4 @@
-def dockerImage
+
 pipeline{
 
   agent any
@@ -51,13 +51,15 @@ stage('Sonarqube Analysis'){
     }
   }
 
-  stage('Build Docker Image'){
+  stage('Build Docker Image & Push'){
     steps{
       script{
         //bat 'docker build -t konyq/test-maven-pipeline .'
-        /*def dockerImage = docker.build("test-maven-pipeline:${env.BUILD_ID}")
-          dockerImage.push()*/
-            dockerImage = docker.build("${IMAGE_NAME}")
+        /*def dockerImage = docker.build("test-maven-pipeline:${env.BUILD_ID}")*/
+            def dockerImage = docker.build("${IMAGE_NAME}")
+            dockerImage.push("${IMAGE_TAG}")
+            dockerImage('latest')
+
           /*
            withDockerRegistry(credentialsId: DOCKER_PASS, toolName: 'Docker-Latest'){
               docker_image = docker.build '${IMAGE_NAME}'
@@ -70,16 +72,6 @@ stage('Sonarqube Analysis'){
       }
   }
 }
- /* stage('Push Docker Image'){
-    steps{
-       script {
-         withDockerRegistry( '', registryCredential ) {
-            dockerImage.push()
-          }
-        }
-    }
-  }*/
-
 
 }
 
