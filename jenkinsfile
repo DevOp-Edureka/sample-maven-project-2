@@ -76,9 +76,10 @@ pipeline{
     steps{
       script{
         withCredentials([string(credentialsId: 'dockerhub-pwd', variable: 'dockerhubpwd')]) {
+          echo '${dockerhubpwd}'
+          echo '${DOCKER_PASS}'
            // bat 'docker login -u konyq -p ${dockerhubpwd}' - this wat dont working but it suppost to work
-            bat 'docker login -u konyq -p ${DOCKER_PASS}'
-
+            bat 'docker login -u konyq -p ${dockerhubpwd}'
             bat 'docker push konyq/test-maven-pipeline'
         }
 
