@@ -75,8 +75,8 @@ pipeline{
   stage('Push image to dockerHub'){
     steps{
       script{
-        withCredentials([string(credentialsId: 'dockerhub-pwd', variable: 'dockerhubpwd')]) {
-            bat 'docker login -u konyq -p ${dockerhubpwd}'
+        withCredentials([string(credentialsId: 'dockerhub-pwd', variable: 'dockerpwdaccess')]) {
+            bat 'docker login -u konyq -p ${dockerpwdaccess}'
 
             bat 'docker push konyq/test-maven-pipeline'
         }
