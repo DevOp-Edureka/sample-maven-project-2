@@ -76,7 +76,7 @@ pipeline{
     steps{
       script{
         withCredentials([string(credentialsId: 'dockerhub-pwd', variable: 'dockerpwdaccess')]) {
-            bat 'docker login -u konyq -p ${dockerpwdaccess}'
+            bat 'docker login -u konyq -p Kony19820701Saif'
 
             bat 'docker push konyq/test-maven-pipeline'
         }
