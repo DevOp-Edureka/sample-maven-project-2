@@ -32,7 +32,7 @@ pipeline{
         bat 'mvn clean package'
       }
     }
-stage('Sonarqube Analysis'){
+/*stage('Sonarqube Analysis'){
     steps{
       script{
           withSonarQubeEnv(credentialsId:'jenkins-sonar-token'){
@@ -49,13 +49,13 @@ stage('Sonarqube Analysis'){
         waitForQualityGate abortPipeline: false, credentialsId: 'jenkins-sonar-token'
       }
     }
-  }
+  }*/
 
-  stage('Build Docker Image & Push'){
+  stage('Build docker image'){
     steps{
       script{
-        //bat 'docker build -t konyq/test-maven-pipeline .'
-        /*def dockerImage = docker.build("test-maven-pipeline:${env.BUILD_ID}")*/
+        bat 'docker build -t konyq/test-maven-pipeline .' // dont know why only thi scomend success result
+        /*def dockerImage = docker.build("${IMAGE_NAME}:${env.BUILD_ID}")
             def dockerImage = docker.build('konyq/test-maven-pipeline2')
             dockerImage.push()
             dockerImage('latest')
@@ -68,9 +68,24 @@ stage('Sonarqube Analysis'){
               docker_image.push('latest')
             }*/
             
-      }
+        }
+    }
   }
-}
+
+  stage('Push image to dockerHub'){
+    steps{
+      script{
+        withCredentials([string(credentialsId: 'dockerhub-pwd', variable: 'dockerhubpwd')]) {
+            bat 'docker login -u konyq -p ${dockerhubpwd}'
+
+            bat 'docker push konyq/test-maven-pipeline'
+        }
+
+      }
+    }
+  }
+
+  ///..............
 
 }
 
