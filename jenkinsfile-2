@@ -7,48 +7,12 @@ tools {
 stages {
   stage('compile') {
     steps {
-   		git url: 'hhttps://github.com/DevOp-Edureka/sample-maven-project-2'
-				sh 'mvn compile'
+   git url: 'hhttps://github.com/DevOp-Edureka/sample-maven-project-2'
+  sh 'mvn compile'
       // One or more steps need to be included within the steps block.
     }
   }
 
-  stage('review') {
-    steps {
-      // One or more steps need to be included within the steps block.
-    }
-    post {
-      success {
-        // One or more steps need to be included within each condition's block.
-      }
-    }
-  }
-
-  stage('unit-test') {
-    steps {
-      // One or more steps need to be included within the steps block.
-    }
-    post{
-            junit stdioRetention: '', testResults: '/target/*.xml'
-      }
-}
-
-  stage('coverage') {
-    steps {
-      // One or more steps need to be included within the steps block.
-    }
-  }
-
-  stage('package') {
-    steps {
-      // One or more steps need to be included within the steps block.
-    }
-    post {
-      success {
-        // One or more steps need to be included within each condition's block.
-      }
-    }
-  }
 
 }
 
