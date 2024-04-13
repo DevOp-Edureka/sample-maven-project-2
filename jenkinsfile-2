@@ -7,7 +7,7 @@ tools {
 stages {
   stage('compile') {
     steps {
-   git url: 'https://github.com/DevOp-Edureka/sample-maven-project-2'
+   git branch: 'main', url: 'https://github.com/DevOp-Edureka/sample-maven-project-2'
   sh 'mvn compile'
       // One or more steps need to be included within the steps block.
     }
