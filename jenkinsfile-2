@@ -7,6 +7,8 @@ tools {
 stages {
   stage('compile') {
     steps {
+   sh ''
+        echo 'Code Compile'
       // One or more steps need to be included within the steps block.
     }
   }
@@ -26,7 +28,10 @@ stages {
     steps {
       // One or more steps need to be included within the steps block.
     }
-  }
+    post{
+            junit stdioRetention: '', testResults: '/target/*.xml'
+      }
+}
 
   stage('coverage') {
     steps {
