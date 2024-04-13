@@ -1,10 +1,26 @@
 pipeline {
     agent any
 
-    tools {
-        // Install the Maven version configured as "M3" and add it to the path.
-        maven "M3"
+tools {
+  maven 'Maven3'
+}
+stages {
+  stage('compile') {
+    steps {
+      // One or more steps need to be included within the steps block.
     }
+  }
+
+  stage('review') {
+    steps {
+      // One or more steps need to be included within the steps block.
+    }
+    post {
+      success {
+        // One or more steps need to be included within each condition's block.
+      }
+    }
+  }
 
   stage('unit-test') {
     steps {
@@ -22,7 +38,16 @@ pipeline {
     steps {
       // One or more steps need to be included within the steps block.
     }
+    post {
+      success {
+        // One or more steps need to be included within each condition's block.
+      }
+    }
   }
+
+}
+
+ 
 
 }
 
